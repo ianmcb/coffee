@@ -3,13 +3,13 @@ class Brew(object):
 
     ratio = 30 / 1000 # grams per mililitre
 
-    def water(self, grounds):
+    def _water(self, grounds):
         """Determine how much water (in mililitre) to use for a given
         number of grounds (in grams) in a direct drip style brew.
         """
         return grounds / self.ratio
 
-    def grounds(self, water):
+    def _grounds(self, water):
         """Determine how much coffee grounds (in grams) needs to be
         added to a given amount of water (in militres).
         """
@@ -67,19 +67,25 @@ class ColdBrew(Brew):
             ratio = (required - water) / water
         return cls(ratio)
 
-    def water(self, grounds):
+    def _water(self, grounds):
         """Determine how much water (in mililitres) needs to be added to a
         given amount of coffee grounds (in grams).
         """
-        water = super().water(grounds) / (self.dilution + 1)
+        water = super()._water(grounds) / (self.dilution + 1)
         return water
 
-    def grounds(self, water):
+    def water(self, grounds):
+        print("Add %.0f ml of water" % self._water(grounds))
+
+    def _grounds(self, water):
         """Determine how much coffee grounds (in grams) needs to be
         added to a given amount of water (in mililitres).
         """
-        grounds = super().grounds(water) * (self.dilution + 1)
+        grounds = super()._grounds(water) * (self.dilution + 1)
         return grounds
+
+    def grounds(self, water):
+        print("Add %.0f g of coffee" % self.grounds(water))
 
     def getDrink(self, size):
         """Tell how much water needs to be added to what amount of concentrate
